@@ -57,24 +57,23 @@ class ProductManager {
     const products = this.getProductsFromFile();
     const index = products.findIndex((product) => product.id === id);
   
-    // Validar campos obligatorios solo si se proporcionan
+
     if (updatedProduct.title === undefined) {
       console.log("Error: El título es obligatorio para actualizar un producto.");
       return;
     }
-  
-    // Buscar productos con el mismo código
+
     const productWithSameCode = products.find(
       (existingProduct) =>
         existingProduct.code === updatedProduct.code &&
         existingProduct.id !== id
     );
   
-    // Mostrar información adicional
+
     console.log("Product With Same Code:", productWithSameCode);
     console.log("Updated Product:", updatedProduct);
   
-    // Validar si el código ya existe en otro producto
+ 
     if (productWithSameCode) {
       console.log(
         "Error: El código del producto ya existe en otro producto. Debe ser único."
@@ -82,7 +81,7 @@ class ProductManager {
       return;
     }
   
-    // Actualizar el título y otras propiedades si se proporcionan
+ 
     products[index].title = updatedProduct.title;
   
     this.saveProductsToFile(products);
