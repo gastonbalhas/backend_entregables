@@ -1,13 +1,14 @@
-const ProductManager = require ('./ProductManager');
 
-const productManager = new ProductManager('products.json'); 
+import ProductManager from "./src/ProductManager.js";
+
+const productManager = new ProductManager('products.json');
 
 const newProduct = {
-  title: 'Producto de prueba',
-  description: 'Este es un producto de prueba',
+  title: 'Producto agregado de prueba',
+  description: 'Este es un producto agregado de prueba',
   price: 200,
   thumbnail: 'Sin imagen',
-  code: 'abc123',
+  code: 'a4',
   stock: 25,
 };
 
@@ -16,19 +17,17 @@ productManager.addProduct(newProduct);
 const allProducts = productManager.getProducts();
 console.log('Todos los productos + uno de prueba:', allProducts);
 
-const productId = 3;
-  const productById = productManager.getProductById(productId);
-  console.log('traigo solo el Producto 3 por ID:', productById);
-
-const productIdToUpdate = 1; 
+const productIdToUpdate = 1;
 
 const updatedProduct = {
   title: 'SIN STOCK - titulo actualizado',
-
 };
 
+// Actualiza solo el título del producto con el ID 1
 productManager.updateProduct(productIdToUpdate, updatedProduct);
+
+
+
 
 const updatedProducts = productManager.getProducts();
 console.log('Productos actualizados:', updatedProducts);
-
