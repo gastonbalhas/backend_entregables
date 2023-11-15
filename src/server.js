@@ -1,10 +1,18 @@
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path'; 
 import express from 'express';
 import ProductManager from './ProductManager.js';
 
 const app = express();
-const PORT = 3000;
+const PORT = 8080;
 
-const productManager = new ProductManager('./products.json');
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const productFilePath = join(__dirname, 'products.json'); 
+
+const productManager = new ProductManager(productFilePath);
+
 
 app.get("/", (req, res) => {
   res.send("¡Bienvenido al servidor de productos!");
