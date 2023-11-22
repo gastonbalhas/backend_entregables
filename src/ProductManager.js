@@ -27,17 +27,41 @@ class ProductManager {
     this.saveProductsToFile(products);
   }
 
- getProductsFromFile() {
-  try {
-    const data = fs.readFileSync(this.path, 'utf-8');
-    console.log("Data from file:", data); 
-    return JSON.parse(data);
-  } catch (error) {
-    console.error("Error reading file:", error); 
-    return [];
-  }
-}
+  updateProduct(id, updatedProduct) {
+    const products = this.getProductsFromFile();
+    const index = products.findIndex((product) => product.id === id);
 
+    if (index !== -1) {
+      products[index] = { ...products[index], ...updatedProduct };
+      this.saveProductsToFile(products);
+      return true;
+    }
+
+    return false;
+  }
+
+  deleteProduct(id) {
+    let products = this.getProductsFromFile();
+    const initialLength = products.length;
+    products = products.filter((product) => product.id !== id);
+
+    if (products.length !== initialLength) {
+      this.saveProductsToFile(products);
+      return true;
+    }
+
+    return false;
+  }
+
+  getProductsFromFile() {
+    try {
+      const data = fs.readFileSync(this.path, 'utf-8');
+      return JSON.parse(data);
+    } catch (error) {
+      console.error("Error reading file:", error); 
+      return [];
+    }
+  }
 
   saveProductsToFile(products) {
     const data = JSON.stringify(products, null, 2);
@@ -51,50 +75,6 @@ class ProductManager {
   getProductById(id) {
     const products = this.getProductsFromFile();
     return products.find((product) => product.id === id);
-  }
-
-  updateProduct(id, updatedProduct) {
-    const products = this.getProductsFromFile();
-    const index = products.findIndex((product) => product.id === id);
-  
-
-    if (updatedProduct.title === undefined) {
-      console.log("Error: El título es obligatorio para actualizar un producto.");
-      return;
-    }
-
-    const productWithSameCode = products.find(
-      (existingProduct) =>
-        existingProduct.code === updatedProduct.code &&
-        existingProduct.id !== id
-    );
-  
-
-    console.log("Product With Same Code:", productWithSameCode);
-    console.log("Updated Product:", updatedProduct);
-  
- 
-    if (productWithSameCode) {
-      console.log(
-        "Error: El código del producto ya existe en otro producto. Debe ser único."
-      );
-      return;
-    }
-  
- 
-    products[index].title = updatedProduct.title;
-  
-    this.saveProductsToFile(products);
-  }
-
-  deleteProduct(id) {
-    const products = this.getProductsFromFile();
-    const index = products.findIndex((product) => product.id === id);
-
-    if (index !== -1) {
-      products.splice(index, 1);
-      this.saveProductsToFile(products);
-    }
   }
 
   getNextProductId(products) {

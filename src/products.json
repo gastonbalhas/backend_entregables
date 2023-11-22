@@ -88,5 +88,19 @@
     "thumbnail": "img10.jpg",
     "code": "A10",
     "stock": 7
+  },
+  {
+    "id": 11,
+    "title": "Nuevo Producto generado desde postman metodo POST",
+    "description": "Descripción del nuevo producto",
+    "code": "NP001",
+    "price": 25.99,
+    "status": true,
+    "stock": 50,
+    "category": "Electrónicos",
+    "thumbnails": [
+      "ruta/imagen1.jpg",
+      "ruta/imagen2.jpg"
+    ]
   }
 ]
