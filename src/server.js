@@ -1,56 +1,29 @@
-import { fileURLToPath } from 'url';
-import { dirname, join } from 'path'; 
 import express from 'express';
-import ProductManager from './ProductManager.js';
+import http from 'http';
+import { Server } from 'socket.io';
+import exphbs from 'express-handlebars';
+import productsRouter from './routes/productRoutes.js';
+import cartRouter from './routes/cartRoutes.js';
+import path from 'path';
 
 const app = express();
-const PORT = 8080;
+const server = http.createServer(app);
+const io = new Server(server);
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+app.engine('.hbs', exphbs({ extname: '.hbs' }));
+app.set('view engine', '.hbs');
+app.set('views', path.join(__dirname, 'views'));
 
-const productFilePath = join(__dirname, 'products.json'); 
-
-const productManager = new ProductManager(productFilePath);
-
+app.use(express.json());
 
 app.get("/", (req, res) => {
-  res.send("¡Bienvenido al servidor de productos!");
+  res.send("¡Bienvenido al servidor de productos y carritos!");
 });
 
-app.get("/products", async (req, res) => {
-  try {
-    const limit = parseInt(req.query.limit);
-    const allProducts = await productManager.getProducts();
+app.use("/api/products", productsRouter); 
+app.use("/api/carts", cartRouter);
 
-    if (!isNaN(limit)) {
-      res.json(allProducts.slice(0, limit));
-    } else {
-      res.json(allProducts);
-    }
-  } catch (error) {
-    console.error(error);
-    res.status(500).send('Error interno del servidor');
-  }
+
+server.listen(8080, () => {
+  console.log('Server is running on port 8080');
 });
-
-app.get("/products/:pid", async (req, res) => {
-  try {
-    const productId = parseInt(req.params.pid);
-    if (!isNaN(productId)) {
-      const product = await productManager.getProductById(productId);
-      if (product) {
-        res.json(product);
-      } else {
-        res.status(404).send('Producto no encontrado');
-      }
-    } else {
-      res.status(400).send('ID de producto no válido');
-    }
-  } catch (error) {
-    console.error(error);
-    res.status(500).send('Error interno del servidor');
-  }
-});
-
-app.listen(PORT, () => console.log(`Server Listening on port ${PORT}`));
