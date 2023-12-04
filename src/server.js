@@ -23,6 +23,13 @@ app.get("/", (req, res) => {
 app.use("/api/products", productsRouter); 
 app.use("/api/carts", cartRouter);
 
+io.on('connection', (socket) => {
+  console.log('A user connected');
+  
+  socket.on('addProduct', (newProduct) => {
+    io.emit('updateProducts', {});
+  });
+});
 
 server.listen(8080, () => {
   console.log('Server is running on port 8080');
