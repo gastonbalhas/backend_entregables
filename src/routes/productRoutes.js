@@ -99,3 +99,4 @@ productsRouter.delete("/:id", (req, res) => {
 });
 
 export default productsRouter;
+

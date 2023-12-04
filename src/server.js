@@ -1,18 +1,24 @@
 import express from 'express';
 import http from 'http';
 import { Server } from 'socket.io';
-import exphbs from 'express-handlebars';
+import handlebars from 'express-handlebars';
+
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
 import productsRouter from './routes/productRoutes.js';
-import cartRouter from './routes/cartRoutes.js';
-import path from 'path';
+import cartsRouter from './routes/cartRoutes.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
 
-app.engine('.hbs', exphbs({ extname: '.hbs' }));
+// Configuración del motor de plantillas handlebars
+app.engine('.hbs', handlebars({ extname: '.hbs' }));
 app.set('view engine', '.hbs');
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', join(__dirname, 'views'));
 
 app.use(express.json());
 
@@ -21,7 +27,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/products", productsRouter); 
-app.use("/api/carts", cartRouter);
+app.use("/api/carts", cartsRouter);
 
 io.on('connection', (socket) => {
   console.log('A user connected');
