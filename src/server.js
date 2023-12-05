@@ -16,7 +16,7 @@ const server = http.createServer(app);
 const io = new Server(server);
 
 // Configuración del motor de plantillas handlebars
-app.engine('.hbs', handlebars({ extname: '.hbs' }));
+app.engine('.hbs', handlebars.engine({ extname: '.hbs' }));
 app.set('view engine', '.hbs');
 app.set('views', join(__dirname, 'views'));
 
