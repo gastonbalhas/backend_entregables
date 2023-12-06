@@ -4,7 +4,7 @@ import CartManager from '../managers/CartsManager.js';
 const cartsRouter = express.Router();
 const cartManager = new CartManager('./cart.json');
 
-cartsRouter.get("/:id", (req, res) => {
+cartsRouter.get("/", (req, res) => {
   try {
     const cartId = req.params.id;
     const cartData = cartManager.getCartById(cartId);

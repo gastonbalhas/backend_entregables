@@ -1,8 +1,13 @@
 import fs from 'fs';
+import { fileURLToPath } from 'url';
+import path from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 class ProductManager {
-  constructor(path) {
-    this.path = path;
+  constructor() {
+    this.path = path.join(__dirname, '../data/products.json');
   }
 
   addProduct(product) {
@@ -78,7 +83,6 @@ class ProductManager {
     const data = JSON.stringify(products, null, 2);
     fs.writeFileSync(this.path, data);
   }
-
   getProducts() {
     return this.getProductsFromFile();
   }
